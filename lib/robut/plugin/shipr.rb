@@ -42,7 +42,7 @@ private
     deploy = Deploy.new(*args)
     response = deploy.perform
     reply "Deploying #{deploy.repo} to #{deploy.environment}: " +
-      "#{Deploy.base}/#{response.parsed_response['uuid']}/stream"
+      "#{Deploy.base}/deploy/#{response.parsed_response['uuid']}"
   end
   
   class Deploy
