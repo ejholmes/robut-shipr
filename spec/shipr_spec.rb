@@ -13,17 +13,17 @@ describe Robut::Plugin::Shipr do
       {
         message: '@robut deploy app to production',
         parsed: { app: 'app', env: 'production', branch: 'master' },
-        reply: 'Deploying app to production: https://:Ak6th@shipr.herokuapp.com/deploy/:id'
+        reply: 'Deploying app to production: https://shipr.herokuapp.com/:id/stream'
       },
       {
         message: '@robut deploy app',
         parsed: { app: 'app', env: 'production', branch: 'master' },
-        reply: 'Deploying app to production: https://:Ak6th@shipr.herokuapp.com/deploy/:id'
+        reply: 'Deploying app to production: https://shipr.herokuapp.com/:id/stream'
       },
       {
         message: '@robut deploy app to staging',
         parsed: { app: 'app', env: 'staging', branch: 'develop' },
-        reply: 'Deploying app to staging: https://:Ak6th@shipr.herokuapp.com/deploy/:id'
+        reply: 'Deploying app to staging: https://shipr.herokuapp.com/:id/stream'
       }
     ].each do |test|
       context "with the message: #{test[:message]}" do

@@ -41,7 +41,8 @@ private
   def deploy(*args)
     deploy = Deploy.new(*args)
     response = deploy.perform
-    reply "Deploying #{deploy.repo} to #{deploy.environment}: #{response.parsed_response['uuid']}"
+    reply "Deploying #{deploy.repo} to #{deploy.environment}: " +
+      "#{Deploy.base}/#{response.parsed_response['uuid']}/stream"
   end
   
   class Deploy
@@ -83,10 +84,6 @@ private
     def self.basic_auth
       auth = ENV['SHIPR_AUTH'].to_s.split(':')
       { :username => auth[0], :password => auth[1] }
-    end
-
-    def self.authenticated_base
-      base.gsub /(https?:\/\/)/, "\\1#{ENV['SHIPR_AUTH']}@"
     end
 
   private

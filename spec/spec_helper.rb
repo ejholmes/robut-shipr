@@ -11,7 +11,7 @@ RSpec.configure do |config|
 
   config.include(Module.new do
     def stub_shipr_request(options = {})
-      stub_request(:post, "https://:Ak6th@shipr.herokuapp.com/deploy")
+      stub_request(:post, "https://:Ak6th@shipr.herokuapp.com/api/deploy")
         .with(body: "{\"repo\":\"git@github.com:remind101/#{options[:app]}.git\",\"config\":{\"ENVIRONMENT\":\"#{options[:env]}\"},\"branch\":\"#{options[:branch]}\"}")
         .to_return(body: { uuid: ':id' }.to_json, headers: { 'Content-Type' => 'application/json' })
     end
