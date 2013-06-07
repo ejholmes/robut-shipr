@@ -42,7 +42,7 @@ private
     deploy = Deploy.new(*args)
     response = deploy.perform
     reply "Deploying #{deploy.repo} to #{deploy.environment}: " +
-      "#{Deploy.base}/deploy/#{response.parsed_response['uuid']}"
+      "#{Deploy.base}/deploys/#{response.parsed_response['id']}"
   end
   
   class Deploy
@@ -89,7 +89,7 @@ private
   private
 
     def endpoint
-      "#{self.class.base}/api/deploy"
+      "#{self.class.base}/api/deploys"
     end
 
     def nwo
