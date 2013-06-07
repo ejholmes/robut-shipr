@@ -7,6 +7,23 @@ require 'httparty'
 class Robut::Plugin::Shipr
   include Robut::Plugin
 
+  class << self
+    attr_reader :determine_branch
+
+    # A lambda to determine what branch should be deployed for the given
+    # environment, by default.
+    def determine_branch
+      @determine_branch ||= lambda { |environment|
+        case environment
+        when 'staging'
+          'develop'
+        else
+          'master'
+        end
+      }
+    end
+  end
+
   VERSION = '0.0.1'
 
   desc "deploy <repo> - Fuck it! We'll do it live!"
@@ -57,12 +74,7 @@ private
     end
 
     def branch
-      @branch ||= case environment
-      when 'staging'
-        'develop'
-      else
-        'master'
-      end
+      @branch ||= Robut::Plugin::Shipr.determine_branch[environment]
     end
 
     def self.base
