@@ -1,24 +1,27 @@
-# Robut::Shipr
+# Robut Shipr
 
-TODO: Write a gem description
+A Robut plugin for [Shipr](http://github.com/ejholmes/shipr)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'robut-shipr'
+```ruby
+gem 'robut-shipr'
+```
 
-And then execute:
+Add it to your Chatfile:
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install robut-shipr
+```ruby
+require 'robut/plugin/shipr'
+Robut::Plugin.plugins << Robut::Plugin::Shipr
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+* `@robut deploy app`
+* `@robut deploy app to staging`
+* `@robut deploy app#feature-branch to staging`
 
 ## Contributing
 
