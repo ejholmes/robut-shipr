@@ -24,8 +24,6 @@ class Robut::Plugin::Shipr
     end
   end
 
-  VERSION = '0.0.1'
-
   desc "deploy <repo> - Fuck it! We'll do it live!"
   match /^deploy (\S+)$/, :sent_to_me => true do |repo|
     deploy repo
