@@ -26,8 +26,8 @@ class Robut::Plugin::Shipr
 
   def usage
     [
-      "deploy <repo> - Fuck it! We'll do it live!",
-      "deploy <repo> to <environment> - Deploy the repo to the specified environment."
+      "#{at_nick} deploy <repo> - Fuck it! We'll do it live!",
+      "#{at_nick} deploy <repo> to <environment> - Deploy the repo to the specified environment."
     ]
   end
 
