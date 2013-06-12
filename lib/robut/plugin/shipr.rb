@@ -24,14 +24,23 @@ class Robut::Plugin::Shipr
     end
   end
 
-  desc "deploy <repo> - Fuck it! We'll do it live!"
-  match /^deploy (\S+)$/, :sent_to_me => true do |repo|
-    deploy repo
+  def usage
+    [
+      "deploy <repo> - Fuck it! We'll do it live!",
+      "deploy <repo> to <environment> - Deploy the repo to the specified environment."
+    ]
   end
 
-  desc "deploy <repo> to <environment> - Fuck it! We'll do it live!"
-  match /^deploy (\S+) to (\S+)$/, :sent_to_me => true do |repo, environment|
-    deploy repo, :environment => environment
+  def handle(time, sender_nick, message)
+    if sent_to_me?(message)
+      message = without_nick message
+      force = !!message.gsub!(/(.*)!$/, '\1')
+      if message =~ /^deploy (\S+)$/
+        deploy $1, :force => force
+      elsif message =~ /^deploy (\S+) to (\S+)$/
+        deploy $1, :environment => $2, :force => force
+      end
+    end
   end
 
 private
@@ -56,10 +65,11 @@ private
     def perform
       body = {
         :repo   => repo_uri,
-        :config => { 'ENVIRONMENT' => environment }
+        :config => { 'ENVIRONMENT' => environment },
+        :branch => branch
       }
 
-      body.merge!(:branch => branch)
+      body[:config].merge!('FORCE' => force) if force
 
       HTTParty.post endpoint,
         :body => body.to_json,
@@ -69,6 +79,10 @@ private
 
     def environment
       options[:environment] || 'production'
+    end
+
+    def force
+      options[:force] || false
     end
 
     def branch

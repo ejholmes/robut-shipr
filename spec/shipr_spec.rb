@@ -24,6 +24,21 @@ describe Robut::Plugin::Shipr do
         message: '@robut deploy app to staging',
         parsed: { app: 'app', env: 'staging', branch: 'develop' },
         reply: 'Deploying app to staging: https://shipr.herokuapp.com/deploys/:id'
+      },
+      {
+        message: '@robut deploy app#topic to staging',
+        parsed: { app: 'app', env: 'staging', branch: 'topic' },
+        reply: 'Deploying app to staging: https://shipr.herokuapp.com/deploys/:id'
+      },
+      {
+        message: '@robut deploy app!',
+        parsed: { app: 'app', config: { 'ENVIRONMENT' => 'production', 'FORCE' => true }, branch: 'master' },
+        reply: 'Deploying app to production: https://shipr.herokuapp.com/deploys/:id'
+      },
+      {
+        message: '@robut deploy app to staging!',
+        parsed: { app: 'app', config: { 'ENVIRONMENT' => 'staging', 'FORCE' => true }, branch: 'develop' },
+        reply: 'Deploying app to staging: https://shipr.herokuapp.com/deploys/:id'
       }
     ].each do |test|
       context "with the message: #{test[:message]}" do
