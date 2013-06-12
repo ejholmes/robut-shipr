@@ -32,12 +32,12 @@ describe Robut::Plugin::Shipr do
       },
       {
         message: '@robut deploy app!',
-        parsed: { app: 'app', config: { 'ENVIRONMENT' => 'production', 'FORCE' => true }, branch: 'master' },
+        parsed: { app: 'app', config: { 'ENVIRONMENT' => 'production', 'FORCE' => '1' }, branch: 'master' },
         reply: 'Deploying app to production: https://shipr.herokuapp.com/deploys/:id'
       },
       {
         message: '@robut deploy app to staging!',
-        parsed: { app: 'app', config: { 'ENVIRONMENT' => 'staging', 'FORCE' => true }, branch: 'develop' },
+        parsed: { app: 'app', config: { 'ENVIRONMENT' => 'staging', 'FORCE' => '1' }, branch: 'develop' },
         reply: 'Deploying app to staging: https://shipr.herokuapp.com/deploys/:id'
       }
     ].each do |test|

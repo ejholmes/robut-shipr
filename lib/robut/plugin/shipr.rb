@@ -34,7 +34,7 @@ class Robut::Plugin::Shipr
   def handle(time, sender_nick, message)
     if sent_to_me?(message)
       message = without_nick message
-      force = !!message.gsub!(/(.*)!$/, '\1')
+      force = !!message.gsub!(/(.*)!$/, '\1') ? '1' : false
       if message =~ /^deploy (\S+)$/
         deploy $1, :force => force
       elsif message =~ /^deploy (\S+) to (\S+)$/
