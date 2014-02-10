@@ -1,11 +1,25 @@
 require 'robut'
 require 'json'
 require 'httparty'
+require 'hashie'
 
 ##
 # Get the current status of and issues affecting the heroku platform.
 class Robut::Plugin::Shipr
   include Robut::Plugin
+
+  http do
+    post '/shipr/deploy' do
+      payload = Hashie::Mash.new(JSON.parse(request.env['rack.input'].read))
+      common = "#{payload.repo}##{payload.branch} to #{payload.config.ENVIRONMENT}"
+      if payload.success?
+        say "Deployed #{common}", nil
+      else
+        say "Failed to deploy #{common}", nil
+      end
+      status 200
+    end
+  end
 
   class << self
     attr_reader :determine_branch
@@ -71,7 +85,8 @@ private
       body = {
         :repo   => repo_uri,
         :config => { 'ENVIRONMENT' => environment },
-        :branch => branch
+        :branch => branch,
+        :notify => [ "#{ENV['BASE_URL']}/shipr/deploy" ]
       }
 
       body[:config].merge!('FORCE' => force) if force
