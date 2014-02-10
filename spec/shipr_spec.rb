@@ -51,5 +51,32 @@ describe Robut::Plugin::Shipr do
         end
       end
     end
+
+    describe 'retry' do
+      context 'when there is no previous deploy' do
+        it 'does not break' do
+          plugin.handle(Time.now, 'eric', '@robut retry deploy')
+        end
+      end
+
+      context 'when there is a previous deploy' do
+        before do
+          @request = stub_shipr_request(app: 'app', config: { 'ENVIRONMENT' => 'staging' }, branch: 'develop')
+          plugin.handle(Time.now, 'eric', '@robut deploy app to staging')
+        end
+
+        it 'retries the last deploy' do
+          plugin.handle(Time.now, 'eric', '@robut retry deploy')
+          expect(@request).to have_been_requested.twice
+        end
+
+        context 'with a bang' do
+          it 'retries the last deploy with force enabled' do
+            stub_shipr_request(app: 'app', config: { 'ENVIRONMENT' => 'staging', 'FORCE' => '1' }, branch: 'develop')
+            plugin.handle(Time.now, 'eric', '@robut restart deploy!')
+          end
+        end
+      end
+    end
   end
 end

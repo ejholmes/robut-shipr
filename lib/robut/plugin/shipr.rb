@@ -27,7 +27,8 @@ class Robut::Plugin::Shipr
   def usage
     [
       "#{at_nick} deploy <repo> - Fuck it! We'll do it live!",
-      "#{at_nick} deploy <repo> to <environment> - Deploy the repo to the specified environment."
+      "#{at_nick} deploy <repo> to <environment> - Deploy the repo to the specified environment.",
+      "#{at_nick} retry deploy - Retry the last deploy command."
     ]
   end
 
@@ -39,6 +40,9 @@ class Robut::Plugin::Shipr
         deploy $1, :force => force
       elsif message =~ /^deploy (\S+) to (\S+)$/
         deploy $1, :environment => $2, :force => force
+      elsif message =~ /^(retry|restart) deploy/ && @last_deploy
+        @last_deploy[1].merge!(:force => force)
+        deploy *@last_deploy
       end
     end
   end
@@ -47,9 +51,10 @@ private
 
   def deploy(*args)
     deploy = Deploy.new(*args)
-    response = deploy.perform
+    response = deploy.perform.parsed_response
     reply "Deploying #{deploy.repo} to #{deploy.environment}: " +
-      "#{Deploy.base}/deploys/#{response.parsed_response['id']}"
+      "#{Deploy.base}/deploys/#{response['id']}"
+    @last_deploy = args
   end
   
   class Deploy
