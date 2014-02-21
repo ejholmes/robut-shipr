@@ -1,20 +1,18 @@
 module Robut::Plugin
   class Shipr::Deploy
-    attr_reader :repo, :branch, :options
+    attr_reader :name, :branch, :options
 
-    def initialize(repo, options = {})
-      @repo, @branch = repo.split(configuration.branch_delimiter)
+    def initialize(name, options = {})
+      @name, @branch = name.split(configuration.branch_delimiter)
       @options = options
     end
 
     def perform
       body = {
-        repo: repo_uri,
-        config: { 'ENVIRONMENT' => environment },
+        repo: repo,
+        config: config,
         branch: branch
       }
-
-      body[:config].merge!('FORCE' => force) if force
 
       HTTParty.post endpoint,
         body: body.to_json,
@@ -35,16 +33,22 @@ module Robut::Plugin
     end
 
   private
+    
+    def config
+      config = { 'ENVIRONMENT' => environment }
+      config.merge!('FORCE' => force) if force
+      config
+    end
 
     def endpoint
       "#{configuration.api_base}/api/deploys"
     end
 
     def nwo
-      repo =~ /\// ? repo : "#{configuration.github_organization}/#{repo}"
+      name =~ /\// ? name : "#{configuration.github_organization}/#{name}"
     end
 
-    def repo_uri
+    def repo
       "git@github.com:#{nwo}.git"
     end
 
