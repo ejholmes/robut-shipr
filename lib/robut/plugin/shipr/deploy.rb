@@ -36,7 +36,7 @@ module Robut::Plugin
     
     def config
       config = { 'ENVIRONMENT' => environment }
-      config.merge!('FORCE' => force) if force
+      config.merge!('FORCE' => '1') if force
       config
     end
 

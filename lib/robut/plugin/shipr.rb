@@ -33,23 +33,14 @@ module Robut::Plugin
       end
     end
 
-    def usage
-      [
-        "#{at_nick} deploy <repo> - Fuck it! We'll do it live!",
-        "#{at_nick} deploy <repo> to <environment> - Deploy the repo to the specified environment."
-      ]
+    desc "deploy <repo> - Fuck it! We'll do it live!"
+    match /^deploy (\S+?)(!)?$/, sent_to_me: true do |repo, force|
+      deploy repo, force: force
     end
 
-    def handle(time, sender_nick, message)
-      if sent_to_me?(message)
-        message = without_nick message
-        force = !!message.gsub!(/(.*)!$/, '\1') ? '1' : false
-        if message =~ /^deploy (\S+)$/
-          deploy $1, force: force
-        elsif message =~ /^deploy (\S+) to (\S+)$/
-          deploy $1, environment: $2, force: force
-        end
-      end
+    desc "deploy <repo> to <environment> - Deploy the repo to the specified environment."
+    match /^deploy (\S+?) to (\S+?)(!)?$/, sent_to_me: true do |repo, environment, force|
+      deploy repo, environment: environment, force: force
     end
 
   private
