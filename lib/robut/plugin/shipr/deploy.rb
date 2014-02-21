@@ -1,27 +1,25 @@
 module Robut::Plugin
   class Shipr::Deploy
-    attr_reader :repo
-    attr_reader :branch
-    attr_reader :options
+    attr_reader :repo, :branch, :options
 
     def initialize(repo, options = {})
-      @repo, @branch = repo.split('#')
+      @repo, @branch = repo.split(configuration.branch_delimiter)
       @options = options
     end
 
     def perform
       body = {
-        :repo   => repo_uri,
-        :config => { 'ENVIRONMENT' => environment },
-        :branch => branch
+        repo: repo_uri,
+        config: { 'ENVIRONMENT' => environment },
+        branch: branch
       }
 
       body[:config].merge!('FORCE' => force) if force
 
       HTTParty.post endpoint,
-        :body => body.to_json,
-        :headers => { 'Content-Type' => 'application/json' },
-        :basic_auth => self.class.basic_auth
+        body: body.to_json,
+        headers: { 'Content-Type' => 'application/json' },
+        basic_auth: configuration.credentials
     end
 
     def environment
@@ -36,23 +34,14 @@ module Robut::Plugin
       @branch ||= configuration.branch[environment]
     end
 
-    def self.base
-      ENV['SHIPR_BASE'] || "https://shipr.herokuapp.com"
-    end
-
-    def self.basic_auth
-      auth = ENV['SHIPR_AUTH'].to_s.split(':')
-      { :username => auth[0], :password => auth[1] }
-    end
-
   private
 
     def endpoint
-      "#{self.class.base}/api/deploys"
+      "#{configuration.api_base}/api/deploys"
     end
 
     def nwo
-      repo =~ /\// ? repo : "#{ENV['SHIPR_GITHUB_ORG']}/#{repo}"
+      repo =~ /\// ? repo : "#{configuration.github_organization}/#{repo}"
     end
 
     def repo_uri

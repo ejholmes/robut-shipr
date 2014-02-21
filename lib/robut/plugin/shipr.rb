@@ -60,7 +60,7 @@ module Robut::Plugin
       deploy = Deploy.new(*args)
       response = deploy.perform.parsed_response
       reply "Deploying #{deploy.repo} to #{deploy.environment}: " +
-        "#{Deploy.base}/deploys/#{response['id']}"
+        "#{self.class.configuration.api_base}/deploys/#{response['id']}"
       @last_deploy = args
     end
   end
