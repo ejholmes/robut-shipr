@@ -51,5 +51,4 @@ module Robut::Plugin
       reply DEPLOYING % [deploy.name, deploy.environment, "#{self.class.configuration.api_base}/deploys/#{response['id']}"]
     end
   end
-
 end
