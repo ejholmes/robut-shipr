@@ -19,8 +19,7 @@ RSpec.configure do |config|
       body = {
         :repo   => "git@github.com:remind101/#{options[:app]}.git",
         :config => options[:config] || { 'ENVIRONMENT' => options[:env] },
-        :branch => options[:branch],
-        :notify => ['http://robut.test/shipr/deploy']
+        :branch => options[:branch]
       }
       stub_request(:post, "https://:Ak6th@shipr.herokuapp.com/api/deploys")
         .with(body: body.to_json)

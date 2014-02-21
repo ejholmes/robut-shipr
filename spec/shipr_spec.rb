@@ -79,38 +79,4 @@ describe Robut::Plugin::Shipr do
       end
     end
   end
-
-  describe 'http' do
-    include Rack::Test::Methods
-
-    def app
-      Robut::Web
-    end
-
-    describe 'POST /shipr/deploy' do
-      let(:connection) { double('connection') }
-
-      before do
-        Robut::Web.set :connection, connection
-      end
-
-      context 'when successful' do
-        it 'says it deployed' do
-          connection.should_receive(:reply).with('Deployed git#master to production', nil)
-          post '/shipr/deploy', { repo: 'git', branch: 'master', success: true, config: { ENVIRONMENT: 'production' } }.to_json
-          expect(last_response.status).to eq 200
-          expect(last_response.body).to eq ''
-        end
-      end
-
-      context 'when not successful' do
-        it 'says it failed' do
-          connection.should_receive(:reply).with('Failed to deploy git#master to production', nil)
-          post '/shipr/deploy', { repo: 'git', branch: 'master', config: { ENVIRONMENT: 'production' } }.to_json
-          expect(last_response.status).to eq 200
-          expect(last_response.body).to eq ''
-        end
-      end
-    end
-  end
 end

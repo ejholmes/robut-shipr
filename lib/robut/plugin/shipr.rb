@@ -54,19 +54,6 @@ module Robut::Plugin
       end
     end
 
-    http do
-      post '/shipr/deploy' do
-        payload = Hashie::Mash.new(JSON.parse(request.env['rack.input'].read))
-        common = "#{payload.repo}##{payload.branch} to #{payload.config.ENVIRONMENT}"
-        if payload.success?
-          say "Deployed #{common}", nil
-        else
-          say "Failed to deploy #{common}", nil
-        end
-        status 200
-      end
-    end
-
   private
 
     def deploy(*args)

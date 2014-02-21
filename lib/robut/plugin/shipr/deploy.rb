@@ -13,8 +13,7 @@ module Robut::Plugin
       body = {
         :repo   => repo_uri,
         :config => { 'ENVIRONMENT' => environment },
-        :branch => branch,
-        :notify => [ "#{ENV['BASE_URL']}/shipr/deploy" ]
+        :branch => branch
       }
 
       body[:config].merge!('FORCE' => force) if force
