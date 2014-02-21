@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'robut-plugin/version'
+require 'robut-shipr/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "robut-shipr"
-  spec.version       = RobutPlugin::VERSION
+  spec.version       = RobutShipr::VERSION
   spec.authors       = ["Eric J. Holmes"]
   spec.email         = ["eric@ejholmes.net"]
   spec.description   = %q{A Robut plugin for shipr}
